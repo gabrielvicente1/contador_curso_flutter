@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
+  audioplayers: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -20,6 +21,9 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter:
+  assets:
+    - assets/som_de_pato.mp3
+    - assets/images/
 
   uses-material-design: true
 
