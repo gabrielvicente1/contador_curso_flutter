@@ -1,18 +1,19 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contador_flutter/models/player_models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  var _playerOne = Player(name: "Nós", score: 2, victories: 1);
-  var _playerTwo = Player(name: "Eles", score: 2, victories: 1);
+  final _playerOne = Player(name: "Nós", score: 2, victories: 1);
+  final _playerTwo = Player(name: "Eles", score: 2, victories: 1);
 
   @override
   void initState() {
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _showPlayerName(String name) {
     return Text(
       name.toUpperCase(),
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 22.0,
         fontWeight: FontWeight.w500,
         color: Colors.indigo,
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Text(
         "$score",
-        style: TextStyle(fontSize: 80.0),
+        style: const TextStyle(fontSize: 80.0),
       ),
     );
   }
@@ -69,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Center(
             child: Text(
               text,
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -131,9 +132,9 @@ class _HomeScreenState extends State<HomeScreen> {
       await _audioPlayer.setSource(AssetSource('assets/som_de_pato.mp3'));
       await _audioPlayer.resume();
     } catch (error) {
-      print("Erro ao reproduzir o áudio: $error");
+      "Erro ao reproduzir o áudio: $error";
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao reproduzir o áudio')),
+        const SnackBar(content: Text('Erro ao reproduzir o áudio')),
       );
     } finally {
       _isPlaying = false; // Reseta o estado
@@ -162,14 +163,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ElevatedButton(
-              child: Text("CANCELAR"),
+              child: const Text("CANCELAR"),
               onPressed: () {
                 Navigator.of(context).pop();
                 cancel();
               },
             ),
             ElevatedButton(
-              child: Text("OK"),
+              child: const Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
                 confirm();
@@ -185,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Marcador de Truco',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+        title: const Text('Marcador de Truco',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
         backgroundColor: Colors.indigo,
       ),
       body: Padding(
