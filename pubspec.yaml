@@ -13,15 +13,20 @@ dependencies:
 
   cupertino_icons: ^1.0.6
   audioplayers: ^6.1.0
+  flutter_modular: ^6.3.4
+  playing_cards: ^0.4.1+11
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
   flutter_launcher_icons: ^0.13.1
+  build_runner: ^2.4.11
+  mobx_codegen: ^2.6.1
 
 flutter:
   assets:
+    - assets/icons/
     - assets/som_de_pato.mp3
     - assets/images/
 

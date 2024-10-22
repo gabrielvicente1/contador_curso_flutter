@@ -1,15 +1,10 @@
-import 'package:contador_flutter/modules/home_screen.dart';
+import 'package:contador_flutter/app/app_module.dart';
+import 'package:contador_flutter/app/app_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 void main(){
-  runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Marcador de Truco',
-        theme: ThemeData(primarySwatch: Colors.deepOrange),
-        home: HomeScreen(),
-      )
-  );
+  return runApp(ModularApp(module: AppModule(), child: const AppWidget()));
 }
 
 

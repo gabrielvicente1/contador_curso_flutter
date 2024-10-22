@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:contador_flutter/models/player_models.dart';
+import 'package:contador_flutter/app/models/player_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -91,6 +92,7 @@ class HomeScreenState extends State<HomeScreen> {
               player.score--;
             });
           },
+
         ),
         _buildRoundedButton(
           text: '+1',
@@ -108,7 +110,7 @@ class HomeScreenState extends State<HomeScreen> {
                 },
                 cancel: () {
                   setState(() {
-                    player.score--; // Volta para 11 pontos se cancelar
+                    player.score--;
                   });
                 },
               );
@@ -126,8 +128,8 @@ class HomeScreenState extends State<HomeScreen> {
   bool _isPlaying = false;
 
   void playSound() async {
-    if (_isPlaying) return; // Previne a reprodução de múltiplos sons
-    _isPlaying = true; // Indica que o som está sendo reproduzido
+    if (_isPlaying) return;
+    _isPlaying = true;
     try {
       await _audioPlayer.setSource(AssetSource('assets/som_de_pato.mp3'));
       await _audioPlayer.resume();
@@ -137,7 +139,7 @@ class HomeScreenState extends State<HomeScreen> {
         const SnackBar(content: Text('Erro ao reproduzir o áudio')),
       );
     } finally {
-      _isPlaying = false; // Reseta o estado
+      _isPlaying = false;
     }
   }
 
@@ -163,17 +165,13 @@ class HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ElevatedButton(
-              child: const Text("CANCELAR"),
+              style: const ButtonStyle(
+
+              ),
+              child: const Text("NOVO JOGO"),
               onPressed: () {
                 Navigator.of(context).pop();
                 cancel();
-              },
-            ),
-            ElevatedButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                confirm();
               },
             ),
           ],
@@ -186,8 +184,56 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Marcador de Truco',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+        title: const Text(
+          'Truco',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white
+        ),
+        actions: [
+          IconButton(
+            color: Colors.white,
+            onPressed: () {
+              _resetAllPlayers();
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
         backgroundColor: Colors.indigo,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children:   [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.indigo,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Image.asset('assets/icons/icone-de-cartas.png'),
+              title: const Text('Ordem das Cartas'),
+              onTap: (){
+                Modular.to.pushNamed('/orderCards');
+              },
+            ),
+            ListTile(
+              leading: Image.asset('assets/icons/icone-configuracao.png'),
+              title: const Text('Configurações'),
+              onTap: (){
+                Modular.to.pushNamed('/settings');
+              },
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
