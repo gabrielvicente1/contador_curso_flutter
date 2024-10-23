@@ -3,6 +3,7 @@ import 'package:playing_cards/playing_cards.dart';
 
 class OrderCardsScreen extends StatelessWidget {
   final List<PlayingCard> trucoCards = [
+    PlayingCard(Suit.diamonds, CardValue.ten),
     PlayingCard(Suit.diamonds, CardValue.queen),
     PlayingCard(Suit.spades, CardValue.queen),
     PlayingCard(Suit.hearts, CardValue.queen),
@@ -16,7 +17,6 @@ class OrderCardsScreen extends StatelessWidget {
     PlayingCard(Suit.hearts, CardValue.king),
     PlayingCard(Suit.clubs, CardValue.king),
     PlayingCard(Suit.diamonds, CardValue.ace),
-    PlayingCard(Suit.spades, CardValue.ace),
     PlayingCard(Suit.hearts, CardValue.ace),
     PlayingCard(Suit.clubs, CardValue.ace),
     PlayingCard(Suit.diamonds, CardValue.two),
@@ -36,23 +36,54 @@ class OrderCardsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Ordem das cartas', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
-          backgroundColor: Colors.indigo,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white
         ),
-        body: GridView.builder(
-            padding: const EdgeInsets.all(10),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-            itemCount: trucoCards.length,
-            itemBuilder: (context, index) {
-              return PlayingCardView(
-                card: trucoCards[index],
-                showBack: false, // Exibe a face da carta
-              );
-            }));
+        title: const Text(
+          'Ordem das cartas',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.indigo,
+      ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(10),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
+        itemCount: trucoCards.length,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 2), // Borda da carta
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+              ),
+              alignment: Alignment.center,
+              child: const Text(
+                'TRUCO MINEIRO', // Texto personalizado
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          } else {
+            return PlayingCardView(
+              card: trucoCards[index],
+              showBack: false, // Exibe a face da carta
+            );
+          }
+        },
+      ),
+    );
   }
 }

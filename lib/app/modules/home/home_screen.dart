@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contador_flutter/app/models/player_models.dart';
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,8 +11,9 @@ class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
+
 class HomeScreenState extends State<HomeScreen> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final ConfettiController _confettiController = ConfettiController(duration: const Duration(seconds: 3));
 
   final _playerOne = Player(name: "Nós", score: 2, victories: 1);
   final _playerTwo = Player(name: "Eles", score: 2, victories: 1);
@@ -20,6 +22,12 @@ class HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _resetAllPlayers();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
   }
 
   void _resetPlayer({required Player player, bool resetVictories = true}) {
@@ -89,10 +97,9 @@ class HomeScreenState extends State<HomeScreen> {
           color: Colors.black.withOpacity(0.1),
           onTap: () {
             setState(() {
-              player.score--;
+              if (player.score > 0) player.score--;
             });
           },
-
         ),
         _buildRoundedButton(
           text: '+1',
@@ -102,17 +109,6 @@ class HomeScreenState extends State<HomeScreen> {
               _showDialog(
                 title: 'Fim do jogo',
                 message: '${player.name} ganhou!',
-                confirm: () {
-                  setState(() {
-                    player.victories++;
-                  });
-                  _resetAllPlayers(resetVictories: false);
-                },
-                cancel: () {
-                  setState(() {
-                    player.score--;
-                  });
-                },
               );
             } else {
               setState(() {
@@ -125,53 +121,64 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  bool _isPlaying = false;
-
   void playSound() async {
-    if (_isPlaying) return;
-    _isPlaying = true;
     try {
-      await _audioPlayer.setSource(AssetSource('assets/som_de_pato.mp3'));
-      await _audioPlayer.resume();
+      final newPlayer = AudioPlayer();
+      await newPlayer.setSource(AssetSource('som_de_pato.mp3'));
+      await newPlayer.resume();
     } catch (error) {
-      "Erro ao reproduzir o áudio: $error";
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro ao reproduzir o áudio')),
+        SnackBar(content: Text('Erro ao reproduzir o áudio: $error')),
       );
-    } finally {
-      _isPlaying = false;
     }
   }
 
   void _showDialog({
     required String title,
     required String message,
-    required Function confirm,
-    required Function cancel,
   }) {
+    _confettiController.play();  // Iniciar confetes ao abrir o modal
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Text(message),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: ConfettiWidget(
+                  confettiController: _confettiController,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  shouldLoop: false,
+                  colors: const [
+                    Colors.red,
+                    Colors.green,
+                    Colors.blue,
+                    Colors.orange,
+                    Colors.purple
+                  ],
+                ),
+              ),
+              Text(message),
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    playSound();
+                  },
+                  child: Image.asset('assets/images/pato-445x445.png'),
+                ),
+              ),
+            ],
+          ),
           actions: <Widget>[
-            Center(
-              child: InkWell(
-                onTap: () {
-                  playSound();
-                },
-                child: Image.asset('assets/images/pato_chorando_r.png'),
-              ),
-            ),
             ElevatedButton(
-              style: const ButtonStyle(
-
-              ),
               child: const Text("NOVO JOGO"),
               onPressed: () {
+                setState(() {
+                  _resetAllPlayers();
+                });
                 Navigator.of(context).pop();
-                cancel();
               },
             ),
           ],
@@ -188,9 +195,7 @@ class HomeScreenState extends State<HomeScreen> {
           'Truco',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        iconTheme: const IconThemeData(
-          color: Colors.white
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             color: Colors.white,
@@ -205,7 +210,7 @@ class HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children:   [
+          children: [
             const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.indigo,
@@ -221,14 +226,14 @@ class HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: Image.asset('assets/icons/icone-de-cartas.png'),
               title: const Text('Ordem das Cartas'),
-              onTap: (){
+              onTap: () {
                 Modular.to.pushNamed('/orderCards');
               },
             ),
             ListTile(
               leading: Image.asset('assets/icons/icone-configuracao.png'),
               title: const Text('Configurações'),
-              onTap: (){
+              onTap: () {
                 Modular.to.pushNamed('/settings');
               },
             ),

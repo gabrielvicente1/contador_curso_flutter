@@ -15,6 +15,7 @@ dependencies:
   audioplayers: ^6.1.0
   flutter_modular: ^6.3.4
   playing_cards: ^0.4.1+11
+  confetti: ^0.8.0
 
 dev_dependencies:
   flutter_test:
