@@ -37,7 +37,7 @@ class OrderCardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white
         ),
         title: const Text(
@@ -47,42 +47,50 @@ class OrderCardsScreen extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.black,
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(10),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/imagem_fundo_app_truco.jpg'),
+            fit: BoxFit.cover,
+          ),
         ),
-        itemCount: trucoCards.length,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 2), // Borda da carta
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
-              ),
-              alignment: Alignment.center,
-              child: const Text(
-                'TRUCO MINEIRO', // Texto personalizado
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+        child: GridView.builder(
+          padding: const EdgeInsets.all(10),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+          ),
+          itemCount: trucoCards.length,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2), // Borda da carta
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            );
-          } else {
-            return PlayingCardView(
-              card: trucoCards[index],
-              showBack: false, // Exibe a face da carta
-            );
-          }
-        },
+                alignment: Alignment.center,
+                child: const Text(
+                  'TRUCO MINEIRO', // Texto personalizado
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            } else {
+              return PlayingCardView(
+                card: trucoCards[index],
+                showBack: false, // Exibe a face da carta
+              );
+            }
+          },
+        ),
       ),
     );
   }
